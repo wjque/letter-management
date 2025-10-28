@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Upload, Image, MessageSquare, User, Lock, Eye, EyeOff, Download, FileText } from 'lucide-react';
 
-const API_BASE = process.env.NODE_ENV === 'production' 
-  ? 'https://your-backend-domain.com/api'  // 替换为你的后端API地址
-  : 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000/api';
 
 const App = () => {
   // 应用状态
@@ -516,7 +514,7 @@ const App = () => {
                 <div key={image.id} className="bg-white rounded-xl shadow-sm overflow-hidden">
                   <div className="aspect-square bg-gray-100 flex items-center justify-center">
                     <img
-                      src={`http://localhost:5000${image.url}`}
+                      src={`${image.url.startsWith('http') ? image.url : API_BASE.replace('/api', '') + image.url}`}
                       alt={image.fileName}
                       className="w-full h-full object-contain p-4"
                     />
@@ -680,8 +678,8 @@ const App = () => {
                 return (
                   <div key={image.id} className="bg-white rounded-xl shadow-sm overflow-hidden">
                     <div className="aspect-square bg-gray-100 flex items-center justify-center">
-                      <img
-                        src={image.url}
+                     <img
+                        src={`${image.url.startsWith('http') ? image.url : API_BASE.replace('/api', '') + image.url}`}
                         alt={image.fileName}
                         className="w-full h-full object-contain p-4"
                       />

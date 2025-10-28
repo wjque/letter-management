@@ -1,15 +1,19 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/letter-management/',
+  base: '/', // Vercel 使用根路径
+  build: {
+    outDir: 'dist',
+    sourcemap: false
+  },
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true
+        target: process.env.VITE_API_BASE || 'http://localhost:5000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api')
       }
     }
   }
